@@ -43,7 +43,8 @@ def add_contact(new_contact:ContactModel):
         "message":"Added new Contact"
     }
 
-app.put("api/contacts{id_contact}")
+
+@app.put("api/contacts/{id_contact}")
 def update_contact(id_contact:str, new_contact:ContactModel):
     contacts = md.read_contacts()
     
@@ -55,5 +56,25 @@ def update_contact(id_contact:str, new_contact:ContactModel):
             return {
                 "succes":"True",
                 "message":"Updated Contactt"
-            }
+                }
     raise HTTPException(status_code=404, detail="Contact no found")
+
+
+
+@app.delete("/appi/contacts/{id_contact}")
+def remove_contact(id_contact:str):
+    contacts = md.read_contacts()
+    
+    for index, contact in enumerate(contacts):
+        if contact ["id"] == id_contact:
+            contacts.pop(index)
+            md.write_contacts(contacts)
+            
+            return {
+                "succes":"True",
+                "message":"Deleted Contact"
+                }
+    raise HTTPException(status_code=404, detail="Contact no found")
+
+
+  
